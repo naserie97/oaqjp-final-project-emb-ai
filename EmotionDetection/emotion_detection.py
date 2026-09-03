@@ -21,7 +21,7 @@ def emotion_detector(text_to_analyze):
         json=input_json
     )
 
-    # Error handling for blank input
+    # Handle blank input
     if response.status_code == 400:
         return {
             "anger": None,
