@@ -15,13 +15,41 @@ def emotion_detector(text_to_analyze):
         }
     }
 
-    response = requests.post(
-        url,
-        headers=headers,
-        json=input_json
-    )
+    print("Sending request to Watson...")
 
-    # Handle blank input
+    try:
+        response = requests.post(
+            url,
+            headers=headers,
+            json=input_json,
+            timeout=10
+        )
+
+        print("Response received. Status code:", response.status_code)
+
+    except requests.exceptions.Timeout:
+        print("Watson request timed out.")
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None
+        }
+
+    except requests.exceptions.RequestException as e:
+        print("Request error:", e)
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None
+        }
+
+    # Handle blank/invalid input
     if response.status_code == 400:
         return {
             "anger": None,
